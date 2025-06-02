@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: flask-app-pipeline
+spec:
+  params:
+    - name: git-url
+      type: string
+      default: https://github.com/your-username/flask-cicd-demo
+    - name: git-revision
+      type: string
+      default: main
+    - name: image-name
+      type: string
+      default: flask-app
+    - name: image-tag
+      type: string
+      default: latest
+  
+  workspaces:
+    - name: shared-workspace
+  
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    
+    - name: run-tests
+      taskRef:
+        name: run-tests
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      runAfter:
+        - fetch-source
+    
+    - name: build-image
+      taskRef:
+        name: build-image
+      params:
+        - name: image-name
+          value: $(params.image-name)
+        - name: image-tag
+          value: $(params.image-tag)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      runAfter:
+        - run-tests
