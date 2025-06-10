@@ -7,7 +7,7 @@ spec:
     - name: source
   steps:
     - name: install-deps
-      image: python:3.11-slim
+      image: registry.redhat.io/rhel8/python-311:1-92.1749045878
       script: |
         #!/bin/bash
         cd $(workspaces.source.path)
@@ -15,7 +15,7 @@ spec:
         pip install -r requirements-test.txt
         
     - name: run-tests
-      image: python:3.11-slim
+      image: registry.redhat.io/rhel8/python-311:1-92.1749045878
       script: |
         #!/bin/bash
         cd $(workspaces.source.path)
