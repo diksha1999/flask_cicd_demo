@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-tests
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: install-deps
+      image: python:3.11-slim
+      script: |
+        #!/bin/bash
+        cd $(workspaces.source.path)
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+        
+    - name: run-tests
+      image: python:3.11-slim
+      script: |
+        #!/bin/bash
+        cd $(workspaces.source.path)
+        python -m pytest test_app.py -v --cov=app --cov-report=term-missing
+        echo "Tests completed successfully"
