@@ -9,10 +9,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY app.py .
 
-# Create non-root user
-RUN useradd -r -u 1001 appuser && chown -R appuser:appuser /app
-USER appuser
+RUN chgrp -R 0 /app && \
+    chmod -R g+rwX /app
 
 EXPOSE 8080
+
+# Switch to non-root user (UBI images come with a default user)
+USER 1001
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "app:app"]
