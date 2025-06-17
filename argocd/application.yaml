@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/your-username/flask-cicd-demo
     targetRevision: main
-    path: k8s
+    path: openshift
   destination:
     server: https://kubernetes.default.svc
     namespace: flask-app
