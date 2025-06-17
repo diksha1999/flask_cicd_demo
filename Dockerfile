@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhel8/python-311:1-92.1749045878
+FROM registry.access.redhat.com/ubi8/python-311
 
 WORKDIR /app
 
